@@ -1,53 +1,103 @@
-# Antigravity Travel AI 🌍✈️
+# TripGPT: Voice-First AI Travel Planner 🌍✈️
 
-A Voice-First AI Travel Planner built with React, Node.js, and OpenAI.
+**TripGPT** is a next-generation travel planning assistant that combines conversational voice AI with grounded real-world data to create feasible, personalized itineraries.
 
-## 🚀 Features
-- **Voice-to-Plan**: Speak your travel desires, and get a structured itinerary.
-- **Real-Time Data**: Uses OpenStreetMap (Overpass API) to find real POIs.
-- **Grounded Reasoning**: Explains why it chose certain places.
-- **Smart Edits**: "Make day 2 more relaxed" updates only the relevant sections.
-- **Rich UI**: Glassmorphism design with interactive itinerary cards.
+## 🚀 Key Features
+
+- **🎙️ Voice-First Navigation**: Speak naturally to plan, modify, and explore trips.
+- **📚 Grounded Knowledge (RAG)**: Integrates **Wikivoyage** data for city guides, safety tips, and etiquette.
+- **🛠️ MCP Architecture**: Modularized core capabilities (POI Search & Itinerary Building) using the **Model Context Protocol**.
+- **🗺️ Real-World Data**: Uses **OpenStreetMap (Overpass API)** for actual points of interest.
+- **📄 Pro PDF Export**: Integrated **n8n workflow** to generate and email professional itineraries.
+- **⚖️ AI Evaluations**: Automated checks for feasibility, edit correctness, and grounding.
+
+---
+
+## 🏗️ System Architecture
+
+### **1. Orchestration Layer (Node.js)**
+The central hub that manages the conversation flow between the User, LLM (OpenAI), and various tools.
+- **MCP Orchestrator**: Manages standard I/O communication with specialized MCP servers.
+- **RAG Service**: Handles caching and retrieval of travel knowledge with citations.
+
+### **2. MCP Tools**
+- **POI Search Server**: Grounded search for real-world locations via OpenStreetMap.
+- **Itinerary Builder Server**: Generates structured plans and performs **Feasibility Checks** (Time/Pace/Conflicts).
+
+### **3. Companion UI (React + Vite)**
+A high-performance web interface designed with **Glassmorphism** aesthetics.
+- Features: Real-time Transcript, Itinerary Cards, Sidebar History, and **Sources & References** section.
+
+---
 
 ## 🛠️ Tech Stack
-- **Frontend**: React, Vite, TailwindCSS, Web Speech API
-- **Backend**: Node.js, Express
-- **AI**: OpenAI GPT-4o (Tool Calling / Function Calling)
-- **Tools**: 
-    - `search_pois`: OSM Overpass integration
-    - `update_itinerary`: Structured JSON generator
+- **Frontend**: React, Vite, TailwindCSS, Lucide Icons.
+- **Backend**: Node.js, Express, MCP SDK.
+- **AI**: OpenAI GPT-4o (Tool Calling).
+- **Automation**: n8n.
+- **Data**: OpenStreetMap (OSM), Wikivoyage.
 
-## 🏃‍♂️ How to Run
+---
 
-1. **Start the Server**
+## 🚦 Getting Started
+
+### **Prerequisites**
+- Node.js (v18+)
+- OpenAI API Key
+- n8n instance (optional for PDF export)
+
+### **Installation**
+
+1. **Clone & Install Backend**
    ```bash
    cd server
    npm install
-   # Ensure .env has OPENAI_API_KEY
-   node index.js
+   # Create .env and add OPENAI_API_KEY
+   npm start
    ```
 
-2. **Start the Client**
+2. **Install Frontend**
    ```bash
    cd client
    npm install
    npm run dev
    ```
 
-3. **Open App**
-   - Visit `http://localhost:5173`
-   - Click "Start Listening" and say: *"Plan a 2-day trip to Tokyo."*
+3. **Verify**
+   - Open `http://localhost:5173`
+   - Ensure the server logs show: `[MCP Orchestrator] Connected successfully.`
+
+---
 
 ## 🧪 AI Evaluations
-Run the automated evaluation suite:
+
+We implement three core evaluation checks to ensure system reliability:
+1.  **Feasibility Eval**: Validates duration, travel times, and pace consistency.
+2.  **Edit Correctness Eval**: Ensures voice modifications only affect intended sections.
+3.  **Grounding Eval**: Verifies POIs map to dataset records and tips cite RAG sources.
+
+Run the suite:
 ```bash
 cd server
-node tests/evals.js
+npm test
 ```
-*Tests included: Grounding Check (POI Usage), Feasibility Check (Time), Edit Correctness.*
 
-## 📂 Project Structure
-- `client/src/App.jsx`: Main Voice UI & Itinerary Render
-- `server/services/aiService.js`: AI Logic & Tool Orchestration
-- `server/tools/poiSearch.js`: OpenStreetMap Connector
-- `server/tools/itineraryTool.js`: Itinerary State Manager
+---
+
+## 📚 Requirements Checklist (Capstone)
+
+- [x] **Voice-Based Planning** (Supported via Web Speech API)
+- [x] **Voice-Based Editing** (History-aware tool calls)
+- [x] **Explanation & Reasoning** (Grounded via RAG Citations)
+- [x] **At least 2 MCP Tools** (POI Search & Itinerary Builder)
+- [x] **RAG Implementation** (Wikivoyage guides with sources)
+- [x] **n8n Workflow** (PDF Generation & Email)
+- [x] **Companion UI** (Detailed Itinerary + Sources View)
+- [x] **AI Evaluations** (3 runnable checks)
+- [x] **Version Control** (Initialized Git Repo)
+- [x] **Deployment Ready** (Configured for Vercel/Render)
+
+---
+
+## 📄 License
+MIT License - Created for Capstone Project.

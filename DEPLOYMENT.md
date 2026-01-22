@@ -14,7 +14,7 @@ This project is structured for a dual-deployment model: **Vercel** for the front
 5.  **Add Environment Variables**:
     *   `OPENAI_API_KEY`: Your OpenAI key.
     *   `N8N_WEBHOOK_URL`: Your n8n webhook URL.
-    *   `FRONTEND_URL`: The URL of your deployed frontend (e.g., `https://tripgpt.vercel.app`).
+    *   `FRONTEND_URL`: `https://tripgpt.vercel.app`
     *   `PORT`: `3000` (Render will override this, but good to have).
 
 ### **Why Render?**

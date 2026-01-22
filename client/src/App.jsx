@@ -57,6 +57,11 @@ function App() {
     } else {
       alert("Browser doesn't support speech recognition.");
     }
+
+    // Pre-fetch voices
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.getVoices();
+    }
   }, []); // Empty dependency array to init once
 
   // Save history to localStorage whenever it changes
@@ -132,7 +137,31 @@ function App() {
       setStatus('speaking');
       // Cancel previous
       window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
+
+      // Clean text: remove markdown symbols so it doesn't say "hashtag" or "star"
+      const cleanText = text
+        .replace(/[#*`_~\[\]()<>]/g, '') // Remove markdown symbols
+        .replace(/- /g, '')              // Remove bullet points
+        .trim();
+
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+
+      // Try to find a female voice
+      const voices = window.speechSynthesis.getVoices();
+      const femaleVoice = voices.find(v =>
+        (v.name.toLowerCase().includes('female') ||
+          v.name.toLowerCase().includes('samantha') ||
+          v.name.toLowerCase().includes('victoria') ||
+          v.name.toLowerCase().includes('zira') ||
+          v.name.toLowerCase().includes('google us english') ||
+          v.name.toLowerCase().includes('karen')) &&
+        v.lang.startsWith('en')
+      );
+
+      if (femaleVoice) {
+        utterance.voice = femaleVoice;
+      }
+
       utterance.onend = () => setStatus('idle');
       window.speechSynthesis.speak(utterance);
     }
