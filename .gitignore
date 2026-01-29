@@ -4,3 +4,4 @@ data/wikivoyage_cache/
 dist/
 .DS_Store
 *.log
+*.webp

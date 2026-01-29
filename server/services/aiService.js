@@ -107,6 +107,10 @@ Example workflow:
 
         let latestItinerary = null;
         const toolUsage = [];
+        if (process.env.DEMO_MODE === 'true') {
+            return getDemoResponse(conversationHistory);
+        }
+
         let response = await openai.chat.completions.create({
             model: "gpt-4o-mini",
             messages: messages,
@@ -202,6 +206,37 @@ Example workflow:
         console.error("OpenAI Error:", error);
         throw error;
     }
+}
+
+/**
+ * Mock response for Demo Video (Works when OpenAI quota is reached)
+ */
+function getDemoResponse(history) {
+    const lastMessage = history[history.length - 1].content.toLowerCase();
+
+    if (lastMessage.includes('paris')) {
+        return {
+            content: "Excellent choice! Paris is a dream for art and food lovers. Based on Wikivoyage data, I've planned visits to the Louvre and the best patisseries. I've also checked the feasibility: Day 2 is quite packed, so stay hydrated!",
+            itinerary: {
+                days: [
+                    {
+                        day: 1,
+                        activities: [
+                            { time: "09:00", activity: "Visit Louvre Museum", location: "Rue de Rivoli", notes: "Focus on Denon wing for Mona Lisa." },
+                            { time: "13:00", activity: "Lunch at Le Comptoir", location: "St-Germain", notes: "Famous for traditional bistrot fare." }
+                        ]
+                    }
+                ]
+            },
+            sources: [{ title: "Paris", source: "Wikivoyage", url: "https://en.wikivoyage.org/wiki/Paris" }]
+        };
+    }
+
+    return {
+        content: "I'm in Demo Mode! Try asking about 'Paris' to see a full itinerary with sources.",
+        itinerary: null,
+        sources: []
+    };
 }
 
 module.exports = { generateResponse };
